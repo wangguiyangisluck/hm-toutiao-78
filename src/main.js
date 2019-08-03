@@ -8,6 +8,11 @@ import 'element-ui/lib/theme-chalk/index.css'
 // index.vue index.json
 import router from '@/router'
 
+// 导入样式
+import '@/styles/index.less'
+import axios from 'axios'
+Vue.prototype.$http = axios
+
 // 是否开始产品级别提示   不开启 如果产品上线环节就可以减少一些日志的输出
 // 开发阶段 提示越详细越好 开发级别的提示
 Vue.config.productionTip = false

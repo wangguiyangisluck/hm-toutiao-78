@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    ppA
-    <el-button type="primary" round>主要按钮</el-button>
+    <!-- 一级路由的出口  一级路由对应组件渲染的位置 -->
+    <router-view></router-view>
   </div>
 </template>
 
