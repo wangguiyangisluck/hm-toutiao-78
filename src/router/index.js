@@ -11,6 +11,7 @@ import Comment from '@/views/comment'
 import Fans from '@/views/fans'
 import Setting from '@/views/setting'
 import Notfound from '@/views/404'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
@@ -84,6 +85,19 @@ const router = new VueRouter({
     }
   ]
 
+})
+
+// 加上全局前置导航守卫
+router.beforeEach((to, from, next) => {
+  // // 1.如果是登陆路由就放行
+  // if (to.path === '/login') return next()
+  // // 2.获取用户信息 如果没有 拦截登陆
+  // if (!store.getUser().token) return next('/login')
+  // // 3.放行
+  // next()
+
+  if (to.path !== '/login' && !store.getUser().token) return next('/login')
+  next()
 })
 
 export default router

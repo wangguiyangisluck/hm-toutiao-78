@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import store from '@/store'
 export default {
   data () {
     // 自定义校验函数
@@ -63,14 +64,20 @@ export default {
   methods: {
     login () {
       // 1.对整个表单进行校验
-      this.$refs.loginForm.validate((valid) => {
+      this.$refs.loginForm.validate(valid => {
         if (valid) {
           console.log('siccess')
           // 2.校验成功发送登陆请求
-          this.$http.post('http://ttapi.research.itcast.cn/mp/v1_0/authorizations', this.loginForm)
+          this.$http
+            .post(
+              'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
+              this.loginForm
+            )
             .then(res => {
               // res是响应对象  res.data数据属于响应主体
               // console.log(res.data)
+              // 存储用户信息
+              store.setUser(res.data.data)
               this.$router.push('/')
             })
             .catch(() => {
