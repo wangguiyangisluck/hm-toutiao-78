@@ -11,6 +11,8 @@ import router from '@/router'
 // 导入样式
 import '@/styles/index.less'
 import axios from '@/api'
+import myPlugin from '@/components'
+Vue.use(myPlugin)
 Vue.prototype.$http = axios
 
 // 是否开始产品级别提示   不开启 如果产品上线环节就可以减少一些日志的输出
