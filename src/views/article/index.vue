@@ -16,14 +16,10 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道：">
-          <el-select v-model="reqParams.channel_id" clearable placeholder="请选择">
-            <el-option
-              v-for="item in channelOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+          <!-- 使用自己的组件 -->
+          <!-- 当绑定了v-model时 做的第一件事就是 :value="reqParams.channel_id" -->
+          <!-- @input="reqParams.channel_id=数据" -->
+          <my-channel v-model="reqParams.channel_id"></my-channel>
         </el-form-item>
         <el-form-item label="日期：">
           <el-date-picker
@@ -74,7 +70,7 @@
         <el-table-column label="发布时间" prop="pubdate"></el-table-column>
         <el-table-column label="操作" width="120">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" plain circle></el-button>
+            <el-button type="primary" @click="edit(scope.row.id)" icon="el-icon-edit" plain circle></el-button>
             <el-button type="danger" @click="del(scope.row.id)" icon="el-icon-delete" plain circle></el-button>
           </template>
         </el-table-column>
@@ -108,14 +104,14 @@ export default {
       // 收集请求参数(表单数据)
       reqParams: {
         status: null,
-        channel_id: null,
+        channel_id: 2,
         begin_pubdate: null,
         end_pubdate: null,
         page: 1,
         per_page: 20
       },
       // 频道下拉选项数据
-      channelOptions: [],
+      // channelOptions: [],
       // 日期数据
       dateArr: [],
       // 文章列表数据
@@ -126,24 +122,48 @@ export default {
   },
   // 计算属性 computed 当你需要一个新数据， 依赖data中的数据得到，当data中数据改变，计算属性也会改变
   // 侦听器 watch 当你需要监听  某个data数据改变，改变后做性能开销较大操作时(异步操作),也可以做其他事情
-  watch: {
-    // 如果要监听对象下的属性，应该用字符串当作方法名
-    'reqParams.channel_id': function (newVal, oldVal) {
-      // console.log(newVal)
-      if (newVal === '') {
-        // axios 不会将参数提交给后台
-        this.reqParams.channel_id = null
-      }
-    }
-  },
+  // watch: {
+  //   // 如果要监听对象下的属性，应该用字符串当作方法名
+  //   'reqParams.channel_id': function (newVal, oldVal) {
+  //     // console.log(newVal)
+  //     if (newVal === '') {
+  //       // axios 不会将参数提交给后台
+  //       this.reqParams.channel_id = null
+  //     }
+  //   }
+  // },
   created () {
     // created 钩子函数 是组件实例完成，属性已经绑定,但是还没有挂载到Dom中
     // 获取频道下拉选项数据
-    this.getChannelOptions()
+    // this.getChannelOptions()
     // 获取文章列表数据
     this.getArticle()
   },
   methods: {
+    // 编辑文章
+    edit (id) {
+      // 发布文章和编辑文章使用的是用一个路由规则
+      // 如果使用 params 是路径传参 /publish /publish/1000 两个路由规则
+      // 使用query传参 /publish  /publish?id=10
+      this.$router.push('/publish?id=' + id)
+    },
+    // 删除文章
+    del (id) {
+      // 1.弹出一个确认框
+      this.$confirm('亲，此操作将永久删除该文章, 是否继续?', '温馨提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          // 2.点击确认 发起删除请求
+          await this.$http.delete(`articles/${id}`)
+          // 3.删除成功 提示 更新列表
+          this.$message.success('删除文章成功')
+          this.getArticle()
+        })
+        .catch(() => {})
+    },
     // 选择日期后的函数
     changeDate (dateArr) {
       // dateArr[起始日期,结束日期]
@@ -169,12 +189,12 @@ export default {
       this.reqParams.page = newPage
       this.getArticle()
     },
-    async getChannelOptions () {
-      const {
-        data: { data }
-      } = await this.$http.get('channels')
-      this.channelOptions = data.channels
-    },
+    // async getChannelOptions () {
+    //   const {
+    //     data: { data }
+    //   } = await this.$http.get('channels')
+    //   this.channelOptions = data.channels
+    // },
     async getArticle () {
       // 请求方式是get  第二个参数是一个对象 {params:指定参数对象}
       const {
