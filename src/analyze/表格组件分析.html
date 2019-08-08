@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <!-- el-table 表格容器 -->
+  <!--:data="tableData" data表格依赖数据 类型数组  -->
+  <el-table
+      :data="tableData"
+      >
+      <!--el-table-column 列组件-->
+      <!--prop="date" 指定当前列的每一行显示的数据的字段名称-->
+      <!--label="日期" 列的标题-->
+      <el-table-column
+        prop="date"
+        label="日期"
+        width="180">
+      </el-table-column>
+    </el-table>
+    tableData:[{date:'2019-10-10'}]
+</body>
+</html>
