@@ -31,7 +31,7 @@
 <script>
 import store from '@/store'
 export default {
-  name: 'Login',
+
   data () {
     // 自定义校验函数
     const checkMobile = (rule, value, callback) => {
