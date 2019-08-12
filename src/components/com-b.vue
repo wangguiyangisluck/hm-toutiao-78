@@ -16,6 +16,9 @@ export default {
     fn () {
       eventBus.$emit('b2a', this.msg)
     }
+  },
+  created () {
+
   }
 }
 </script>
