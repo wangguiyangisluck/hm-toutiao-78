@@ -1,5 +1,9 @@
 <template>
-  <div>个人设置</div>
+  <div>
+    <com-a></com-a>
+    <hr>
+    <com-b></com-b>
+  </div>
 </template>
 
 <script>
